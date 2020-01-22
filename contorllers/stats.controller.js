@@ -4,8 +4,6 @@ const data = {
     audusd: audusdD1Data,
     eurusd: eurusdD1Data,
 }
-// const express = require('express');
-// const app = express();
 const Slingshot = require('./../slingshot');
 
 function calcAllCounts(candles) {
@@ -19,22 +17,20 @@ function calcAllCounts(candles) {
     return calculatedCountsCandles;
 }
 
-// app.get('/stats/:pair/:ratio',(req, res, next) => {
-    // console.log('in route pair');
-    // 
-// })
-exports.getStats = function(req, res, next) {
-    let pairDb = data[req.query.pair]
-    let candles = pairDb.map((candle, index) => 
-        new Slingshot({
-          ...pairDb[index],
-            ratio: parseFloat(req.query.ratio),
-            tradeNumber: req.query.tradeNumber
-        })
-    );
-    let finalCandles = calcAllCounts(candles)
-        .filter((candle) => candle.count > req.query.tradeNumber)
+module.exports = {
+    getStats (req, res, next) {
+        let pairDb = data[req.query.pair]
+        let candles = pairDb.map((candle, index) =>
+          new Slingshot({
+              ...pairDb[index],
+              ratio: parseFloat(req.query.ratio),
+              tradeNumber: req.query.tradeNumber
+          })
+        );
+        let finalCandles = calcAllCounts(candles)
+        //   .filter((candle) => candle.count > req.query.tradeNumber)
 
-    res.send(finalCandles)
+        res.send(finalCandles)
 
+    }
 }
