@@ -9,6 +9,7 @@ function verifyToken(req, res, next) {
       // set the token
       req.token = bearerToken;
       // next middleware
+      
       next();
     } else {
       // forbidden

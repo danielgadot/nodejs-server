@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const users = require('./../database/users');
 
 module.exports = {
-  getToken (req, res) {
+  getToken (req, res) {    
     let user;
     users.filter((row) => {
       if (row.username === req.query.username && row.password === req.query.password ) {
@@ -10,8 +10,11 @@ module.exports = {
       }
     })
     if (user) {
+
       jwt.sign({ user }, 'secretkey', (err, token) => {
-        res.send(token)
+        res.send({
+          token
+        })
       })
     } else {
       res.status(403)
