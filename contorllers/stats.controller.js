@@ -19,18 +19,22 @@ function calcAllCounts(candles) {
 
 module.exports = {
     getStats (req, res, next) {
-        let pairDb = data[req.query.pair]
-        let candles = pairDb.map((candle, index) =>
-          new Slingshot({
-              ...pairDb[index],
-              ratio: parseFloat(req.query.ratio),
-              tradeNumber: req.query.tradeNumber
-          })
-        );
-        let finalCandles = calcAllCounts(candles)
-        //   .filter((candle) => candle.count > req.query.tradeNumber)
-
-        res.send(finalCandles)
-
+      if (!req.query.pair) {
+        res.send('missing pair query param')
+      }
+      if (!req.query.ratio) {
+        res.send('missing ratio query param')
+      }
+      let pairDb = data[req.query.pair]
+      let candles = pairDb.map((candle, index) =>
+        new Slingshot({
+            ...pairDb[index],
+            ratio: parseFloat(req.query.ratio),
+            tradeNumber: req.query.tradeNumber
+        })
+      );
+      let finalCandles = calcAllCounts(candles)
+      //   .filter((candle) => candle.count > req.query.tradeNumber)
+      res.send(finalCandles)
     }
 }

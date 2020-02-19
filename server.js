@@ -38,7 +38,7 @@ app.options('*', cors());
             app.use(cookieParser())
             const routes = require('./routes')(app)
 
-// app.get('/', (req, res) => res.sendFile(path.join(__dirname, '../client/index.html')))
+
 // app.use('/', express.static(path.join(__dirname, '../client')));
 app.get('/',(req, res) => {
     res.cookie('name-key', 'daniel-value');
