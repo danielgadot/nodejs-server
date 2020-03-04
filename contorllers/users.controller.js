@@ -26,9 +26,7 @@ module.exports = {
     }
     // get users from db
     db.executeSql('SELECT * FROM users', (users) => {
-      console.log('%c users :: ', 'color: red;font-size:16px', users);
       let user = users.filter((row) => row.username === req.query.username)
-      console.log('%c user found :: ', 'color: red;font-size:16px', user);
       if (user[0]) {
         res.send('user already exists');
       } else {
