@@ -9,35 +9,39 @@ const database = require('./products.json');
 const data = require('./database/audusd-d1.json');
 const MongoClient = require('mongodb').MongoClient;
 const cookieParser = require('cookie-parser');
-const usersDb = require('./database/users');
+// const sqlite3 = require('sqlite3');
+// let db = new sqlite3.Database('./database/mydb.db', (err) => {
+//   if (err) {
+//     return console.error(err.message);
+//   }
+//   console.log('Connected to the in-memory SQlite database.');
+
+//   db.serialize(() => {
+//     db.each(`SELECT * FROM users`, (err, row) => {
+//       if (err) {
+//         console.error(err.message);
+//       }
+//       console.log('sql', row);
+//     });
+//   });
+
+//   // close the database connection
+//   db.close((err) => {
+//     if (err) {
+//       return console.error(err.message);
+//     }
+//     console.log('Close the database connection.');
+//   });
+
+// });
 var cors = require('cors');
 app.use(cors());
 app.options('*', cors());
-// const mongoose = require('mongoose');
-// mongoose.connect('mongodb://localhost:27017', {useNewUrlParser: true});
 
-// let mongoClient = new MongoClient(new Server('localhost', 27017),{ native_parser: true } );
-// MongoClient.connect("mongodb://localhost:27017", {
-    //     useNewUrlParser: true,
-    //     useUnifiedTopology: true
-    // }, function (err, client) {
-        
-        //     if(err) throw err;
-        //     const db = client.db('daniel');
-        //     const collection = db.collection('main');
-        //     collection.find({username: 'daniel'}).toArray((err, items) => {
-            //         console.log(items)
-            //     })
-            
-            
-            // });
-            
-            
-            app.use(bodyParser.urlencoded({ extended: false }));
-            app.use(bodyParser.json());
-            app.use(cookieParser())
-            const routes = require('./routes')(app)
-
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cookieParser())
+const routes = require('./routes')(app)
 
 // app.use('/', express.static(path.join(__dirname, '../client')));
 app.get('/',(req, res) => {

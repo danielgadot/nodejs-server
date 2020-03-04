@@ -1,19 +1,22 @@
-const MongoClient = require('mongodb').MongoClient;
+const sqlite3 = require('sqlite3').verbose();
 
+exports.executeSql = (sql, callback) => {
+  console.log('%c sql :: ', 'color: red;font-size:16px', sql);
+  // open the database
+  let db = new sqlite3.Database('./database/mydb.db', sqlite3.OPEN_READWRITE, (err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Connected to the USERS database');
+  });
+  db.all(sql, (err, res) => {
+    callback(res);
+  });
 
-MongoClient.connect("mongodb://localhost:27017", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}, function (err, client) {
-
-  if(err) throw err;
-  const db = client.db('daniel');
-  const collection = db.collection('main');
-  collection.find({username: 'daniel'}).toArray((err, items) => {
-    console.log(items)
-  })
-
-
-});
-
-module.exports = MongoClient;
+  db.close((err) => {
+    if (err) {
+      console.error(err.message);
+    }
+    console.log('Close the database connection.');
+  });
+}

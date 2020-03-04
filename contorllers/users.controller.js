@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
-const users = require('./../database/users');
+const db = require('./../db');
 const fs = require('fs');
 const path = require('path');
+
 module.exports = {
   // add User
   addUser (req, res) {
@@ -23,33 +24,70 @@ module.exports = {
       res.send('Please enter valid password. Use only numbers and alphabets');
       return;
     }
-    let userAlreadyExists = users.filter((row) => row.username === req.query.username )
-    userAlreadyExists = userAlreadyExists[0];
-    if (userAlreadyExists) {
-      res.send('user already exists');
-    } else {
-      let newUsers = [...users,
+    // get users from db
+    db.executeSql('SELECT * FROM users', (users) => {
+      console.log('%c users :: ', 'color: red;font-size:16px', users);
+      let user = users.filter((row) => row.username === req.query.username)
+      console.log('%c user found :: ', 'color: red;font-size:16px', user);
+      if (user[0]) {
+        res.send('user already exists');
+      } else {
+        let newUser =
           {
             id: users.length + 1,
             username: req.query.username,
             password: req.query.password
-          }
-        ];
-      fs.writeFile(path.join(__dirname, './../database/users.json'), JSON.stringify(newUsers), (err) => {
-        if(err) {
-          return console.log(err);
-        }
-        console.log("The file was saved!");
-      })
-      res.send('user added');
-    }
-
-
-  }
-
+          };
+        db.executeSql(`INSERT INTO users (id, username, password) VALUES (${newUser.id}, '${newUser.username}', '${newUser.password}')`,() => {
+          res.json({
+            msg: `user added`,
+            newUser
+          });
+          res.end();
+        })
+      }
+    })
+  },
   // delete user
+  deleteUser(req, res) {
+    console.log('%c req.params :: ', 'color: red;font-size:16px', req.params);
+    db.executeSql(`DELETE FROM users WHERE id=${req.params.id}`,(user) => {
+      res.json({
+        msg: `deleted user with id = ${req.params.id}`,
+      });
+      res.end();
+    });
+  },
+  // updateUser
+  updateUser(req, res) {
+    // console.log('%c req.body :: ', 'color: red;font-size:16px', req.body);
+    // console.log('%c req.query :: ', 'color: red;font-size:16px', req.query);
+    // console.log('%c req.params :: ', 'color: red;font-size:16px', req.params);
+    let userData = {
+      id: parseInt(req.params.id),
+      username: req.query.username
+    }
+    db.executeSql(`UPDATE users SET username='${userData.username}' WHERE id=${userData.id}`,(user) => {
+      res.json({
+        msg: `updated user with id = ${userData.id}`,
+      });
+      res.end();
+    });
+  },
 
-  // changeUser
+  // getUsers
+  getUsers(req, res) {
+    db.executeSql('SELECT * FROM users',(users) => {
+      res.json(users);
+      res.end();
+    });
+  },
 
-  // getUser
+  // get user
+  getUser(req, res) {
+    db.executeSql(`SELECT * FROM users WHERE id=${req.params.id}`,(user) => {
+      res.json(user);
+      res.end();
+    });
+  },
 };

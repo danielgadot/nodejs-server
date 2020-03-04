@@ -12,7 +12,11 @@ module.exports = function(app) {
     app.get('/userSettings/:id', controllers.usersSettingsCtrl.getSettings);
     app.get('/books', verifyToken, controllers.booksCtrl.getBook);
     app.post('/books', verifyToken, controllers.booksCtrl.postBook);
-    app.post('/signup', verifyToken, controllers.usersCtrl.addUser);
+    app.post('/signup', controllers.usersCtrl.addUser);
+    app.get('/users', verifyToken, controllers.usersCtrl.getUsers);
+    app.get('/user/:id', verifyToken, controllers.usersCtrl.getUser);
+    app.delete('/user/:id', verifyToken, controllers.usersCtrl.deleteUser);
+    app.post('/user/:id', verifyToken, controllers.usersCtrl.updateUser);
     app.use(controllers.errCtrl.errOne)
     app.use(controllers.errCtrl.errTwo)
 };
