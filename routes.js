@@ -8,7 +8,7 @@ const path = require('path');
 module.exports = function(app) {
     app.get('/', (req, res) => res.sendFile(path.join(__dirname, './index.html')))
     app.post('/login', controllers.loginCtrl.getToken);
-    app.get('/stats', verifyToken, controllers.statsCtrl.getStats);
+    // app.get('/stats', verifyToken, controllers.statsCtrl.getStats);
     app.get('/userSettings/:id', controllers.usersSettingsCtrl.getSettings);
     app.get('/books', verifyToken, controllers.booksCtrl.getBook);
     app.post('/books', verifyToken, controllers.booksCtrl.postBook);
