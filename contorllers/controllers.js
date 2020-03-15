@@ -3,6 +3,7 @@ const loginCtrl = require('./login.controller');
 const statsCtrl = require('./stats.controller');
 const errCtrl = require('./err404.controller');
 const usersCtrl = require('./users.controller');
+const tasksCtrl = require('./tasks.controller');
 const usersSettingsCtrl = require('./user-settings.controller');
 
 module.exports = {
@@ -11,5 +12,6 @@ module.exports = {
     statsCtrl,
     errCtrl,
     usersCtrl,
-    usersSettingsCtrl
+    usersSettingsCtrl,
+    tasksCtrl
 };

@@ -12,6 +12,8 @@ module.exports = function(app) {
     app.get('/userSettings/:id', controllers.usersSettingsCtrl.getSettings);
     app.get('/books', verifyToken, controllers.booksCtrl.getBook);
     app.post('/books', verifyToken, controllers.booksCtrl.postBook);
+    app.get('/tasks/:id', verifyToken, controllers.tasksCtrl.getTask);
+    app.post('/tasks/:id', verifyToken, controllers.tasksCtrl.postTask);
     app.post('/signup', controllers.usersCtrl.addUser);
     app.get('/users', verifyToken, controllers.usersCtrl.getUsers);
     app.get('/user/:id', verifyToken, controllers.usersCtrl.getUser);
