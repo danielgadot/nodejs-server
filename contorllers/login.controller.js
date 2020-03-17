@@ -1,31 +1,20 @@
 const jwt = require('jsonwebtoken');
 const sqlite3 = require('sqlite3');
-let db = new sqlite3.Database('./database/mydb.db');
+const db = require('./../db');
 
 module.exports = {
   getToken (req, res) {
+    console.log('req :: ', req.body);
     let users = [];
     // gety users from db
-    db.get(`SELECT * FROM users`, (err, dbUsers) => {
-      if (err) {
-        console.error(err.message);
-      }
-      db.serialize(() => {
-        db.each(`SELECT * FROM users`, (err, user) => {
-          if (err) {
-            console.error(err.message);
-          }
-          users.push(user);
-        });
+    db.executeSql(`SELECT * FROM users`, (dbUsers) => {
       let user;
-      user = users.filter((row) => {
-        if (row.username === req.query.username && row.password === req.query.password ) {
-          user = row;
-        }
-      })
-      if (user) {
+      console.log('users :: ', dbUsers);
+      user = dbUsers.filter((row) => row.username === req.body.username && row.password === req.body.password)
+      console.log('user :: ', user);
+      if (user[0]) {
         // send token
-        jwt.sign({ user }, 'secretkey', (err, token) => {
+        jwt.sign({ user: user[0] }, 'secretkey', (err, token) => {
           res.send({
             token
           })
@@ -34,7 +23,6 @@ module.exports = {
         res.status(403)
         res.send('fail login')
       }
-      });
     })
   }
 };
