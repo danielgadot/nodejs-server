@@ -5,8 +5,6 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const commander = require('commander');
 const inquirer = require('inquirer');
-const database = require('./products.json');
-const data = require('./database/audusd-d1.json');
 const MongoClient = require('mongodb').MongoClient;
 const cookieParser = require('cookie-parser');
 
